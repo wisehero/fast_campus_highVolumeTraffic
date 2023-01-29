@@ -18,21 +18,28 @@ public class Member {
 	private final LocalDate birthday;
 	private final LocalDateTime createdAt;
 	private String nickname;
+	private Long companyCode;
 
 	@Builder
-	public Member(Long id, String nickname, String email, LocalDate birthday, LocalDateTime createdAt) {
+	public Member(Long id, String nickname, String email, LocalDate birthday, Long companyCode,
+			LocalDateTime createdAt) {
 		this.id = id;
 
 		validateNickName(nickname);
 		this.nickname = Objects.requireNonNull(nickname);
 		this.email = Objects.requireNonNull(email);
 		this.birthday = Objects.requireNonNull(birthday);
+		this.companyCode = Objects.requireNonNull(companyCode);
 		this.createdAt = createdAt == null ? LocalDateTime.now() : createdAt;
 	}
 
 	public void changeNickName(String to) {
 		validateNickName(to);
 		nickname = to;
+	}
+
+	public void changeCompanyCode(Long to) {
+		companyCode = to;
 	}
 
 	private void validateNickName(String nickname) {

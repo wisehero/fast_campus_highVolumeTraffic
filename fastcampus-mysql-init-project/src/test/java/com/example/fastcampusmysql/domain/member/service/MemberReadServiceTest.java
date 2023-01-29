@@ -1,6 +1,5 @@
 package com.example.fastcampusmysql.domain.member.service;
 
-import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Assertions;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.fastcampusmysql.domain.member.entity.Member;
 import com.example.fastcampusmysql.domain.member.repository.MemberRepository;
 
 @SpringBootTest
@@ -26,11 +24,7 @@ class MemberReadServiceTest {
 	@DisplayName("회원 조회 테스트")
 	@Test
 	public void testGetMember() {
-		var member = Member.builder()
-				.nickname("chairman")
-				.email("wisehero@naveræ.com")
-				.birthday(LocalDate.now())
-				.build();
+		var member = MemberFixtureFactory.create();
 		var id = memberRepository.save(member).getId();
 
 		var result = service.getMember(id);

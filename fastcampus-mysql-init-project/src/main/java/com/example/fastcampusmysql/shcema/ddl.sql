@@ -52,3 +52,4 @@ create index POST__index_created_date
 
 
 
+alter table member add companyCode int default -1 not null;

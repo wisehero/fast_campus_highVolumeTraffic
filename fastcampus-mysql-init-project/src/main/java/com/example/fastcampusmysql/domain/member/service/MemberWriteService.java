@@ -23,6 +23,7 @@ public class MemberWriteService {
 				.email(command.email())
 				.nickname(command.nickname())
 				.birthday(command.birthday())
+				.companyCode(command.companyCode())
 				.build();
 
 		return memberRepository.save(member);
