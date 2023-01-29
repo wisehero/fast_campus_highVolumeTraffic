@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.fastcampusmysql.domain.member.dto.RegisterMemberCommand;
 import com.example.fastcampusmysql.domain.member.entity.Member;
+import com.example.fastcampusmysql.domain.member.repository.MemberRepository;
 
 @SpringBootTest
 @Transactional
@@ -18,6 +19,9 @@ class MemberWriteServiceTest {
 
 	@Autowired
 	private MemberWriteService service;
+
+	@Autowired
+	private MemberRepository repository;
 
 	@DisplayName("회원정보 등록 테스트")
 	@Test
@@ -31,6 +35,27 @@ class MemberWriteServiceTest {
 		var member = service.register(command);
 
 		assertEquals(command, member);
+	}
+
+	@DisplayName("회원정보 이름 변경 테스트")
+	@Test
+	public void testChangeName() {
+		Member saved = saveMember("chairman");
+		var expected = "chair";
+
+		service.changeNickname(saved.getId(), expected);
+
+		var result = repository.findById(saved.getId()).orElseThrow();
+		Assertions.assertEquals(expected, result.getNickname());
+	}
+
+	private Member saveMember(String name) {
+		var member = Member.builder()
+				.nickname(name)
+				.email("pnu@fastcmapus.com")
+				.birthday(LocalDate.now())
+				.build();
+		return repository.save(member);
 	}
 
 	private void assertEquals(RegisterMemberCommand command, Member member) {

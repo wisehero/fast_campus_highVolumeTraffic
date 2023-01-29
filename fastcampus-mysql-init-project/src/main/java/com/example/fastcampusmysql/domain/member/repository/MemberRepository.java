@@ -43,6 +43,12 @@ public class MemberRepository {
 	}
 
 	public Member save(Member member) {
+		if (member.getId() == null)
+			return insert(member);
+		return update(member);
+	}
+
+	private Member insert(Member member) {
 		SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
 				.withTableName(TABLE)
 				.usingGeneratedKeyColumns("id");
@@ -58,4 +64,9 @@ public class MemberRepository {
 				.build();
 	}
 
+	private Member update(Member member) {
+		var sql = String.format("UPDATE `%s` set email = ?, nickname = ?, birthday = ? WHERE id = ?", TABLE);
+		jdbcTemplate.update(sql, member.getEmail(), member.getNickname(), member.getBirthday(), member.getId());
+		return member;
+	}
 }
