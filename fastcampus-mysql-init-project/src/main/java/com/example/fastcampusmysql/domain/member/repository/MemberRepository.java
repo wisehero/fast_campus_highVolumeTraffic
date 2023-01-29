@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -32,14 +33,23 @@ public class MemberRepository {
 					.createdAt(resultSet.getObject("createdAt", LocalDateTime.class))
 					.build();
 
-	private final JdbcTemplate jdbcTemplate;
+	private final NamedParameterJdbcTemplate jdbcTemplate;
 
 	public Optional<Member> findById(Long id) {
-		String query = String.format("SELECT * FROM `%s` WHERE id = ?", TABLE);
-		List<Member> members = jdbcTemplate.query(query, ROW_MAPPER, id);
+		var params = new MapSqlParameterSource()
+				.addValue("id", id);
+		String query = String.format("SELECT * FROM `%s` WHERE id = :id", TABLE);
+		List<Member> members = jdbcTemplate.query(query, params, ROW_MAPPER);
 
 		Member nullableMember = DataAccessUtils.singleResult(members);
 		return Optional.ofNullable(nullableMember);
+	}
+
+	public List<Member> findAllByIdIn(List<Long> ids) {
+		var params = new MapSqlParameterSource()
+				.addValue("ids", ids);
+		String query = String.format("SELECT * FROM `%s` WHERE id in (:ids)", TABLE);
+		return jdbcTemplate.query(query, params, ROW_MAPPER);
 	}
 
 	public Member save(Member member) {
@@ -49,7 +59,7 @@ public class MemberRepository {
 	}
 
 	private Member insert(Member member) {
-		SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+		SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate.getJdbcTemplate())
 				.withTableName(TABLE)
 				.usingGeneratedKeyColumns("id");
 
@@ -65,9 +75,10 @@ public class MemberRepository {
 	}
 
 	private Member update(Member member) {
-		var sql = String.format("UPDATE `%s` set email = ?, nickname = ?, birthday = ?,  WHERE id = ?",
-				TABLE);
-		jdbcTemplate.update(sql, member.getEmail(), member.getNickname(), member.getBirthday(), member.getId());
+		var params = new BeanPropertySqlParameterSource(member);
+		var sql = String.format(
+				"UPDATE `%s` set email = :email, nickname = :nickname, birthday = :birthday WHERE id = :id", TABLE);
+		jdbcTemplate.update(sql, params);
 		return member;
 	}
 }
