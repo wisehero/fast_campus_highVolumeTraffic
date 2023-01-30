@@ -9,12 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.fastcampusmysql.IntegrationTest;
 import com.example.fastcampusmysql.domain.member.entity.Member;
 import com.example.fastcampusmysql.domain.member.repository.MemberRepository;
 import com.example.fastcampusmysql.domain.member.service.MemberFixtureFactory;
 
-@SpringBootTest
-@Transactional
+@IntegrationTest
 class FollowWriteServiceTest {
 
 	@Autowired

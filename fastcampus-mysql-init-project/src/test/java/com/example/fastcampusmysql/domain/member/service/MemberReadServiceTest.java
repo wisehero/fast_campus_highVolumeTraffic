@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.fastcampusmysql.IntegrationTest;
 import com.example.fastcampusmysql.domain.member.repository.MemberRepository;
 
-@SpringBootTest
-@Transactional
+@IntegrationTest
 class MemberReadServiceTest {
 
 	@Autowired
