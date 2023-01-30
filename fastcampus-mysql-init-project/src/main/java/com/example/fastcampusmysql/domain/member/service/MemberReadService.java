@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.fastcampusmysql.domain.member.dto.MemberDto;
 import com.example.fastcampusmysql.domain.member.entity.Member;
 import com.example.fastcampusmysql.domain.member.repository.MemberRepository;
 
@@ -15,11 +16,19 @@ public class MemberReadService {
 
 	private final MemberRepository memberRepository;
 
-	public Member getMember(Long memberId) {
-		return memberRepository.findById(memberId).orElseThrow();
+	public MemberDto getMember(Long memberId) {
+		var member = memberRepository.findById(memberId).orElseThrow();
+		return toDto(member);
 	}
 
-	public List<Member> getMembers(List<Long> memberIds) {
-		return memberRepository.findAllByIdIn(memberIds);
+	public List<MemberDto> getMembers(List<Long> memberIds) {
+		var members = memberRepository.findAllByIdIn(memberIds);
+		return members.stream()
+				.map(this::toDto)
+				.toList();
+	}
+
+	private MemberDto toDto(Member member) {
+		return new MemberDto(member.getId(), member.getNickname(), member.getEmail(), member.getBirthday());
 	}
 }

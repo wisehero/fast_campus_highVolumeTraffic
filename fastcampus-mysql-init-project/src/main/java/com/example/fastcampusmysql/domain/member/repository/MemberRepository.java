@@ -24,6 +24,9 @@ import lombok.RequiredArgsConstructor;
 public class MemberRepository {
 
 	static final String TABLE = "member";
+
+	//     BeanPropertyRowMapper를 사용하면 별도 맵퍼가 필요 없지만, 기본생성자 + setter를 이용해서 만들기때문에 final 필드를 열어줘야함
+	//    private final BeanPropertyRowMapper<Member> mapper = BeanPropertyRowMapper.newInstance(Member.class);
 	private static final RowMapper<Member> ROW_MAPPER =
 			(ResultSet resultSet, int rowNum) -> Member.builder()
 					.id(resultSet.getLong("id"))

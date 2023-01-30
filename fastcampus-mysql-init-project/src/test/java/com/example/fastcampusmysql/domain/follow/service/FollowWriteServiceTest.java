@@ -5,12 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.fastcampusmysql.IntegrationTest;
-import com.example.fastcampusmysql.domain.member.entity.Member;
+import com.example.fastcampusmysql.domain.member.dto.MemberDto;
 import com.example.fastcampusmysql.domain.member.repository.MemberRepository;
 import com.example.fastcampusmysql.domain.member.service.MemberFixtureFactory;
 
@@ -26,7 +24,7 @@ class FollowWriteServiceTest {
 	@DisplayName("본인 계정을 팔로우 할 수 없다.")
 	@Test
 	public void testSelfFollow() {
-		var member = saveMember();
+		var member = createMemberDto();
 
 		assertThrows(
 				IllegalArgumentException.class,
@@ -37,21 +35,21 @@ class FollowWriteServiceTest {
 	@DisplayName("팔로우 생성 테스트")
 	@Test
 	public void testCreate() {
-		var fromMember = saveMember();
-		var toMember = saveMember();
+		var fromMember = createMemberDto();
+		var toMember = createMemberDto();
 
 		var result = followWriteService.create(fromMember, toMember);
 
 		assertNotNull(result.getId());
-		assertEquals(fromMember.getId(), result.getFromMemberId());
-		assertEquals(toMember.getId(), result.getToMemberId());
+		assertEquals(fromMember.id(), result.getFromMemberId());
+		assertEquals(toMember.id(), result.getToMemberId());
 	}
 
 	@DisplayName("fromMember, toMember 중복 팔로우 테스트")
 	@Test
 	public void testDuplicateFollow() {
-		var fromMember = saveMember();
-		var toMember = saveMember();
+		var fromMember = createMemberDto();
+		var toMember = createMemberDto();
 
 		followWriteService.create(fromMember, toMember);
 		assertThrows(
@@ -60,8 +58,7 @@ class FollowWriteServiceTest {
 		);
 	}
 
-	private Member saveMember() {
-		var member = MemberFixtureFactory.create();
-		return memberRepository.save(member);
+	private MemberDto createMemberDto() {
+		return MemberFixtureFactory.createDto();
 	}
 }
