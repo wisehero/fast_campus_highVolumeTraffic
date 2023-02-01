@@ -1,8 +1,9 @@
 package com.example.fastcampusmysql.domain.post;
 
-import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class PostReadService {
 		return postRepository.groupByCreatedDate(request);
 	}
 
-	public List<Post> getPosts(Long memberId, LocalDate date) {
-		return List.of();
+	public Page<Post> getPosts(Long memberId, PageRequest pageRequest) {
+		return postRepository.findAllByMemberId(memberId, pageRequest);
 	}
 }
