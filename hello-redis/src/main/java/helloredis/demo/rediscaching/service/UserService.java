@@ -1,4 +1,4 @@
-package helloredis.demo.RedisCaching.service;
+package helloredis.demo.rediscaching.service;
 
 import java.util.concurrent.TimeUnit;
 
@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
-import helloredis.demo.RedisCaching.dto.UserProfile;
+import helloredis.demo.rediscaching.dto.UserProfile;
 
 @Service
 public class UserService {

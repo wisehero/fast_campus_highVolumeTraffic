@@ -1,4 +1,4 @@
-package helloredis.demo.RedisCaching.dto;
+package helloredis.demo.rediscaching.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

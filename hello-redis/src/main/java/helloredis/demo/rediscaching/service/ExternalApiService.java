@@ -1,4 +1,4 @@
-package helloredis.demo.RedisCaching.service;
+package helloredis.demo.rediscaching.service;
 
 import org.springframework.stereotype.Service;
 

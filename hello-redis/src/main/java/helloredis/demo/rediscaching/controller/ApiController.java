@@ -1,12 +1,12 @@
-package helloredis.demo.RedisCaching.controller;
+package helloredis.demo.rediscaching.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import helloredis.demo.RedisCaching.dto.UserProfile;
-import helloredis.demo.RedisCaching.service.UserService;
+import helloredis.demo.rediscaching.dto.UserProfile;
+import helloredis.demo.rediscaching.service.UserService;
 
 @RestController
 public class ApiController {
