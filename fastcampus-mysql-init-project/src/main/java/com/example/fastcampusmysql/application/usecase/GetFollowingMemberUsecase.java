@@ -18,11 +18,8 @@ public class GetFollowingMemberUsecase {
 	private final FollowReadService followReadService;
 
 	public List<MemberDto> execute(Long memberId) {
-		var follows = followReadService.getFollowings(memberId);
-		var memberIds = follows
-				.stream()
-				.map(Follow::getToMemberId)
-				.toList();
-		return memberReadService.getMembers(memberIds);
+		var followings = followReadService.getFollowings(memberId);
+		var followingMemberIds = followings.stream().map(Follow::getToMemberId).toList();
+		return memberReadService.getMembers(followingMemberIds);
 	}
 }

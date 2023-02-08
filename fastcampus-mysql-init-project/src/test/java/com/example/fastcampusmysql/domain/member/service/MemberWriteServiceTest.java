@@ -32,8 +32,7 @@ class MemberWriteServiceTest {
 		var command = new RegisterMemberCommand(
 				"wisehero@naver.com",
 				"kjw",
-				LocalDate.now(),
-				1L
+				LocalDate.now()
 		);
 
 		var member = service.register(command);

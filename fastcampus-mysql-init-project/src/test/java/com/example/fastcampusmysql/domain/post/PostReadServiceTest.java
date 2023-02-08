@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.util.StopWatch;
 
 import com.example.fastcampusmysql.IntegrationTest;
 import com.example.fastcampusmysql.factory.PostFixtureFactory;
@@ -64,7 +65,7 @@ public class PostReadServiceTest {
 		System.out.println("Next Cusor: " + result.nextCursorRequest());
 		System.out.println(result.body()
 				.stream()
-				.map(it -> it.getCreatedDate().toString() + " " + it.getId() + " "+ it.getContents())
+				.map(it -> it.getCreatedDate().toString() + " " + it.getId() + " " + it.getContents())
 				.toList()
 		);
 	}
@@ -72,13 +73,25 @@ public class PostReadServiceTest {
 	@DisplayName("벌크 인서트")
 	@Test
 	public void bulkInsert() {
-		LocalDate startDate = LocalDate.of(2022, 1, 1);
+		LocalDate startDate = LocalDate.of(4000, 1, 1);
+		LocalDate endDate = LocalDate.of(9990, 1, 1);
+		var fixture = PostFixtureFactory.get(-1L, startDate, endDate);
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
 
-		var a = IntStream.range(0, 100)
-				.mapToObj(i -> PostFixtureFactory.create(10L, startDate, startDate.plusDays(30)))
+		var _1만 = 10000;
+		var posts = IntStream.range(0, _1만 * 100)
+				.parallel()
+				.mapToObj(i -> fixture.nextObject(Post.class))
 				.toList();
+		stopWatch.stop();
+		System.out.println("객체 생성 시간: " + stopWatch.getTotalTimeSeconds());
+		StopWatch queryStopWatch = new StopWatch();
+		queryStopWatch.start();
 
-		postRepository.bulkInsert(a);
+		postRepository.bulkInsert(posts);
+		queryStopWatch.stop();
+		System.out.println("쿼리 실행 시간: " + queryStopWatch.getTotalTimeSeconds());
 	}
 
 }
