@@ -9,10 +9,10 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class FollowMemberUsecase {
+public class CreateFollowMemberUsecase {
 
-	private MemberReadService memberReadService;
-	private FollowWriteService followWriteService;
+	private final MemberReadService memberReadService;
+	private final FollowWriteService followWriteService;
 
 	public void execute(Long fromMemberId, Long toMemberId) {
 		var fromMember = memberReadService.getMember(fromMemberId);

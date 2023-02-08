@@ -1,14 +1,12 @@
 package com.example.fastcampusmysql.application.usecase;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.example.fastcampusmysql.domain.follow.entity.Follow;
 import com.example.fastcampusmysql.domain.follow.service.FollowReadService;
 import com.example.fastcampusmysql.domain.member.dto.MemberDto;
-import com.example.fastcampusmysql.domain.member.entity.Member;
 import com.example.fastcampusmysql.domain.member.service.MemberReadService;
 
 import lombok.RequiredArgsConstructor;
