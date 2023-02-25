@@ -1,0 +1,9 @@
+spring:
+  cache:
+    # redis ?? ???? ?????? ??
+    type: redis
+  session:
+    storage-type: redis
+  redis:
+    host: localhost
+    port: 6379
