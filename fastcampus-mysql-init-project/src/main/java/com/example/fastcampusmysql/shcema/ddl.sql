@@ -44,6 +44,16 @@ create table POST
         primary key (id)
 );
 
+create table Timeline
+(
+    id int auto_increment,
+    memberId int not null,
+    postId int not null,
+    createdAt datetime not null,
+    constraint Timeline_id_uindex
+        primary key (id)
+);
+
 create index POST__index_member_id
     on POST (memberId);
 

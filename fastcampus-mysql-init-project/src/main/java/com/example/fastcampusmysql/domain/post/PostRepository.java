@@ -89,12 +89,12 @@ public class PostRepository {
 				.addValue("size", size);
 
 		String query = String.format("""
-                SELECT *
-                FROM %s
-                WHERE memberId in (:memberIds) and id < :id
-                ORDER BY id DESC
-                LIMIT :size
-                """, TABLE);
+				SELECT *
+				FROM %s
+				WHERE memberId in (:memberIds) and id < :id
+				ORDER BY id DESC
+				LIMIT :size
+				""", TABLE);
 
 		return jdbcTemplate.query(query, params, ROW_MAPPER);
 
@@ -110,12 +110,12 @@ public class PostRepository {
 				.addValue("size", size);
 
 		String query = String.format("""
-                SELECT *
-                FROM %s
-                WHERE memberId in (:memberIds)
-                ORDER BY id DESC
-                LIMIT :size
-                """, TABLE);
+				SELECT *
+				FROM %s
+				WHERE memberId in (:memberIds)
+				ORDER BY id DESC
+				LIMIT :size
+				""", TABLE);
 
 		return jdbcTemplate.query(query, params, ROW_MAPPER);
 
@@ -163,6 +163,24 @@ public class PostRepository {
 				, TABLE);
 
 		return jdbcTemplate.query(query, params, ROW_MAPPER);
+	}
+
+	public List<Post> findAllByIdIn(List<Long> postIds) {
+		if (postIds.isEmpty()) {
+			return List.of();
+		}
+
+		var params = new MapSqlParameterSource()
+				.addValue("postIds", postIds);
+
+		String query = String.format("""
+				SELECT *
+				FROM %s
+				WHERE id in (:postIds)
+				""", TABLE);
+
+		return jdbcTemplate.query(query, params, ROW_MAPPER);
+
 	}
 
 	public Post save(Post post) {

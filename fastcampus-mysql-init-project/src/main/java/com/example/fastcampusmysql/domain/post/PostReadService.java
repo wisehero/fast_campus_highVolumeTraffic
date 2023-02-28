@@ -25,6 +25,10 @@ public class PostReadService {
 		return postRepository.groupByCreatedDate(request);
 	}
 
+	public List<Post> getPosts(List<Long> postIds) {
+		return postRepository.findAllByIdIn(postIds);
+	}
+
 	public Page<Post> getPosts(Long memberId, PageRequest pageRequest) {
 		return postRepository.findAllByMemberId(memberId, pageRequest);
 	}
