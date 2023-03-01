@@ -35,7 +35,7 @@ class MemberWriteServiceTest {
 				LocalDate.now()
 		);
 
-		var member = service.register(command);
+		var member = service.create(command);
 
 		assertEquals(command, member);
 	}
