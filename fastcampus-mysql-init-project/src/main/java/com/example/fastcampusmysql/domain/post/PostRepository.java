@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -183,10 +184,26 @@ public class PostRepository {
 
 	}
 
+	public Optional<Post> findById(Long postId, boolean requiredLock) {
+		String query = String.format("""
+				SELECT *
+				FROM %s
+				WHERE id = :postId
+				""", TABLE);
+		if (requiredLock) {
+			query += "FOR UPDATE";
+		}
+
+		var params = new MapSqlParameterSource()
+				.addValue("postId", postId);
+		var nullablePost = jdbcTemplate.queryForObject(query, params, ROW_MAPPER);
+		return Optional.ofNullable(nullablePost);
+	}
+
 	public Post save(Post post) {
 		if (post.getId() == null)
 			return insert(post);
-		throw new UnsupportedOperationException("Post는 갱신을 지원하지 않습니다");
+		return update(post);
 	}
 
 	public void bulkInsert(List<Post> posts) {
@@ -218,6 +235,17 @@ public class PostRepository {
 				.createdDate(post.getCreatedDate())
 				.createdAt(post.getCreatedAt())
 				.build();
+	}
+
+	private Post update(Post post) {
+		var sql = String.format("""
+				UPDATE %s set memberId = :memberId, contents = :contents, createdDate = :createdDate, createdAt = :createdAt, likeCount = :likeCount 
+				WHERE id = :id
+				""", TABLE);
+
+		SqlParameterSource params = new BeanPropertySqlParameterSource(post);
+		jdbcTemplate.update(sql, params);
+		return post;
 	}
 
 }
